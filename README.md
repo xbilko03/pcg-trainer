@@ -6,3 +6,7 @@
 - rowWiseSum
 - scalarMultiply
 - vectorAdd
+- columnWiseSum
+- findMax
+- matrixMultiply
+- matrixTranspose
