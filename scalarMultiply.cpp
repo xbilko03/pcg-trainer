@@ -11,16 +11,16 @@ void scalarMultiply(const int* A, int scalar, int* B, int size)
 void scalarMultiply(const int* A, int scalar, int* B, int size)
 {
     int threadId = threadIdx.x + blockIdx.x * blockDim.x;
-    /* this works only in case threadsCount >= size */
-    if(threadId < size)
+
+    for(i = threadId; i < size; i += blockDim.x * gridDim.x)
     {
-        B[threadId] = A[threadId] * scalar;
+        B[i] = A[i] * scalar;
     }
 }
 /* OMP */
 void scalarMultiply(const int* A, int scalar, int* B, int size)
 {
-    #pragma acc data enter copyin(A[:size]. scalar) copyout(B[:size])
+    #pragma acc data enter copyin(A[:size]) copyout(B[:size])
     #pragma acc parallel loop
     for (int i = 0; i < size; i++)
     {

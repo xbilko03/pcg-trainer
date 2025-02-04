@@ -22,12 +22,18 @@ __global__ void matrixMultiply(const int* A, const int* B, int* C, int rowsA, in
 
     if(row >= rowsA || col >= colsB) return;
 
-    int sum = 0;
-    for (int k = 0; k < colsA; k++)
+    for (int i = row; i < rows; i += blockDim.y * gridDim.y)
     {
-        sum += A[row * colsA + k] * B[k * colsB + col]; 
+        for (int j = col; j < cols; j += blockDim.x * blockDim.y)
+        {
+            int sum = 0;
+            for (int k = 0; k < colsA; k++)
+            {
+                sum += A[i * colsA + k] * B[k * colsB + col]; 
+            }
+            C[i * colsB + j] = sum;
+        }
     }
-    C[i * colsB + j] = sum;
 }
 /* OMP */
 void matrixMultiply(const int* A, const int* B, int* C, int rowsA, int colsA, int colsB) 

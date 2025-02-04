@@ -17,7 +17,13 @@ __global__ void matrixTranspose(const int* A, int* T, int rows, int cols)
     
     if (row >= rows || col >= cols) return;
 
-    T[col * rows + row] = A[row * cols + col];
+    for(int i = col; i < cols; i += blockDim.x * gridDim.x)
+    {
+        for(int j = row; j < rows; j += blockDim.x * gridDim.x)
+        {
+            T[i * rows + j] = A[j * cols + i];
+        }
+    }
 }
 /* OMP */
 void matrixTranspose(const int* A, int* T, int rows, int cols)

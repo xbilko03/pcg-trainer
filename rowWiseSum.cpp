@@ -18,11 +18,14 @@ __global__ void rowWiseSum(const int* A, int* sums, int rows, int cols)
     if (row < rows * cols) return;
 
     int sum = 0;
-    for (int j = 0; j < cols; j++)
-    { 
-        sum += A[row * cols + j]; 
-    } 
-    sums[row] = sum;
+    for(int i = row; i < rows; i += blockDim.x * gridDim.x)
+    {
+        for (int j = 0; j < cols; j++)
+        { 
+            sum += A[i * cols + j]; 
+        } 
+        sums[i] = sum;
+    }
 }
 /* OMP */
 void rowWiseSum(const int* A, int* sums, int rows, int cols)

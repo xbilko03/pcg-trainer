@@ -28,7 +28,7 @@ __global__ int findMax(const int* A, int size, int* max)
     sharedMax[threadIdx.x] = localMax;
     __syncThreads();
 
-    for (int stride = blockDimx.x / 2; stide > 0; stide = stide >> 1)
+    for (int stride = blockDimx.x / 2; stride > 0; stride = stride >> 1)
     {
         if(threadIdx.x < stride)
         {
@@ -39,7 +39,7 @@ __global__ int findMax(const int* A, int size, int* max)
         }
     }
 
-    if(threadIdx.x)
+    if(threadIdx.x == 0)
     {
         AtomicMax(max, sharedMax[0]);
     }

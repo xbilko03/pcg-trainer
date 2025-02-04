@@ -12,9 +12,9 @@ __global__ void elementWiseMultiply(const int* A, const int* B, int* C, int size
     threadId = threadIdx.x + blockIdx.x * blockDim.x;
     
     /* this works only in case threadsCount >= size */
-    if(threadId < size)
+    for(int i = threadId; i < size; i += blockDim.x * gridDim.x)
     {
-        C[threadId] = A[threadId] * B[threadId];
+        C[i] = A[i] * B[i];
     }
 }
 /* OMP */

@@ -21,7 +21,7 @@ __global__ void dotProduct(const int* A, const int* B, int size, int* result)
     
     int localResult = 0;
 
-    for (int i = threadId; i < size; i += blockDim.x)
+    for (int i = threadId; i < size; i += blockDim.x * gridDim.x)
     {
         localResult += A[i] * B[i];
     }
@@ -45,7 +45,7 @@ __global__ void dotProduct(const int* A, const int* B, int size, int* result)
 void dotProduct(const int* A, const int* B, int size, int* result)
 {
     result = 0;
-    #pragma acc data enter copyin(A[:size], B[:size], C[:size]) copyout(B[:size])
+    #pragma acc data enter copyin(A[:size], B[:size]) copyout(B[:size])
     #pragma acc parallel loop reduction(+:result)
     for (int i = 0; i < size; i++)
     { 
